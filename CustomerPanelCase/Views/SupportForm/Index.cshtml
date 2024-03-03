@@ -1,0 +1,170 @@
+﻿@model Business.SupportForm.DTOs.SupportFormDTO
+
+<h2>Destek Formları</h2>
+
+<!-- Yeni form ekleme butonu -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupportFormModal">
+    Yeni Form Ekle
+</button>
+
+<!-- Destek Formları Tablosu -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kullanıcı</th>
+            <th>Konu</th>
+            <th>Mesaj</th>
+            <th>Tarih</th>
+            <th>Form Durumu</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var form in Model.SupportFormRs)
+        {
+            <tr>
+                <td>@form.NameSurname</td>
+                <td>@form.Subject</td>
+                <td>@form.Message</td>
+                <td>@form.Date</td>
+                <td>
+                <td>
+                        @if (form.FormStatusId == (int)DataAccess.Enum.FormStatus.OperationIsDone)
+                        {
+                        <span> İşlem yapılmış</span>
+                           
+                        }
+                        @if (form.FormStatusId == (int)DataAccess.Enum.FormStatus.NoActionTaken)
+                        {
+                        <span>İşlem yapılmadı</span>
+                            
+                        }
+                        @if (form.FormStatusId == (int)DataAccess.Enum.FormStatus.Deleted)
+                        {
+                        <span>Silindi</span>
+                        }
+                </td>
+
+                <td>
+                    <button type="button" class="btn btn-info" onclick="editForm(@form.Id)">Güncelle</button>
+
+                </td>
+                <td>
+                    @if(Model.CanEdit)
+                    {
+                        <button type="button" class="btn btn-danger" onclick="deleteForm(@form.Id)">Sil</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="addSupportFormModal" tabindex="-1" role="dialog" aria-labelledby="addSupportFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSupportFormModalLabel">Yeni Destek Formu Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="supportForm" method="post">
+                    <div class="form-group">
+                        <label>Konu</label>
+                        <input type="text" class="form-control" name="Subject" id="Subject" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Mesaj</label>
+                        <textarea class="form-control" name="Message" id="Message" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" onclick="addSupportForm()" class="btn btn-primary">Gönder</button>
+                    <input type="hidden" id="Id" name="Id" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script>
+    function editForm(Id) {
+        $("#Subject").val('');
+        $("#Message").val('');
+        $('#Id').val(Id);
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            cache: false,
+            url: '/SupportForm/ShowSupportFormModel',
+            cache: false,
+            data: {
+                Id: Id,
+            },
+            success: function (data) {
+                if (data) {
+                    $("#Subject").val(data.subject);
+                    $("#Message").val(data.message);
+                    $("#addSupportFormModal").modal('show');
+                }
+            }, async: true,
+            error: function (data) {
+                debugger;
+            },
+            failure: function (data) {
+                debugger;
+            },
+        });
+    }
+    function deleteForm(Id) {
+        $('#Id').val(Id);
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            cache: false,
+            url: '/SupportForm/DeleteSupportForm',
+            cache: false,
+            data: {
+                Id: Id,
+            },
+            success: function (data) {
+                location.reload();
+            }, async: true,
+            error: function (data) {
+                debugger;
+            },
+            failure: function (data) {
+                debugger;
+            },
+        });
+    }
+    function addSupportForm() {
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            cache: false,
+            url: '/SupportForm/AddOrUpdateSupportForm',
+            data: {
+                Id: document.getElementById("Id").value,
+                Subject: document.getElementById("Subject").value,
+                Message: document.getElementById("Message").value,
+            },
+            async: true,
+            success: function (data, textStatus, jqXHR) {
+                location.reload();
+            }, async: true,
+            complete: function (data) {
+                debugger;
+            },
+            error: function (data) {
+                debugger;
+            },
+            failure: function (data) {
+                debugger;
+            },
+        });
+    }
+</script>
