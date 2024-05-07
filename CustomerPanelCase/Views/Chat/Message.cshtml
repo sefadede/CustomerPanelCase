@@ -1,0 +1,100 @@
+﻿@model Business.Chat.DTOs.ChatDTO
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    #sidebar {
+        height: 100vh;
+        background-color: #f8f9fa;
+        border-right: 1px solid #dee2e6;
+    }
+
+    .contact {
+        cursor: pointer;
+    }
+
+        .contact.active {
+            background-color: #e9ecef;
+        }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div id="sidebar" class="col-md-3">
+            <h2>Kişiler</h2>
+            <ul id="contact-list" class="list-group">
+                @foreach (var item in Model.EmployeeList)
+                {
+                    <li class="list-group-item contact" data-id="@item.Id">@item.Name @item.Surname</li>
+                }
+            </ul>
+        </div>
+        <div id="chat-panel" class="col-md-9">
+            <h2>Mesajlaşma</h2>
+            <h3 style="display:none;">0</h3>
+            <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: scroll;">
+            </div>
+            <input type="text" id="message-input" class="form-control mb-2" placeholder="Mesajınızı yazın...">
+            <button id="send-button" class="btn btn-primary btn-block">Gönder</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
+<script>
+
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+    connection.start().then(function () {
+        console.log("SignalR connection established.");
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
+
+    function sendMessageToHub(message, recipientId) {
+        connection.invoke("SendMessage", message, recipientId).catch(function (err) {
+            return console.error(err.toString());
+        });
+    }
+
+    $('.contact').click(function () {
+        var selectedPersonName = $(this).text().trim();
+        var recipientId = $(this).data('id');
+        $('#chat-panel h3').text(recipientId);
+        alert(recipientId);
+        $('#chat-panel h2').text(selectedPersonName + " ile Mesajlaşma");
+        $('#message-input').val('');
+        $('#chat-box').val('');
+    });
+
+    $('#send-button').click(function () {
+        var message = $('#message-input').val().trim();
+        var recipientId = $('#chat-panel h3').text();
+        if (message !== '') {
+            sendMessageToHub(message, recipientId);
+
+
+            $('#message-input').val('');
+
+            $('#chat-box').append('<div>' + message + '</div>');
+
+            $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+        }
+    });
+
+    function sendMessage(message) {
+        $.post('/Chat/SendMessage', { message: message });
+
+    }
+
+    connection.on("ReceiveMessage", function (message, recipientId) {
+        if (recipientId == @Model.EmployeeId) {
+            var newMessageDiv = $('<div>').addClass('message received-message').text(message);
+
+            $('#chat-box').append(newMessageDiv);
+        }
+    });
+</script>
+

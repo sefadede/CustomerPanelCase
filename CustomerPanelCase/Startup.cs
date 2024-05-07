@@ -15,6 +15,8 @@ using Business.Account.Command;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http.Connections;
+using Business.Chat.Hubs;
 
 
 namespace CustomerPanelCase
@@ -47,7 +49,7 @@ namespace CustomerPanelCase
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-
+            services.AddSignalR();
             services.AddControllersWithViews();
             services.AddMediatR(AppDomain.CurrentDomain.Load("Business"));
             services.AddSingleton(Configuration.GetSection("ConnectionStrings").GetValue<string>("RannaConnectionString"));
@@ -79,6 +81,13 @@ namespace CustomerPanelCase
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chatHub", options =>
+                {
+                    options.Transports =
+                        HttpTransportType.WebSockets |
+                        HttpTransportType.LongPolling;
+                });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");

@@ -15,6 +15,7 @@
             <th>Konu</th>
             <th>Mesaj</th>
             <th>Tarih</th>
+            <th>Müşteri</th>
             <th>Form Durumu</th>
             <th></th>
             <th></th>
@@ -28,7 +29,7 @@
                 <td>@form.Subject</td>
                 <td>@form.Message</td>
                 <td>@form.Date</td>
-                <td>
+                <td>@form.CustomerNameSurname</td>
                 <td>
                         @if (form.FormStatusId == (int)DataAccess.Enum.FormStatus.OperationIsDone)
                         {
@@ -73,11 +74,21 @@
             <div class="modal-body">
                 <form id="supportForm" method="post">
                     <div class="form-group">
-                        <label>Konu</label>
+                        <label for="Customers">Müşteri</label>
+                        <select class="form-control" name="Customers" id="Customers" required>
+                            <option value="">Müşteri Seçin</option>
+                            @foreach(var item in Model.CustomerEmployee)
+                            {
+                                <option value="@item.Id">@item.Name @item.Surname</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Subject">Konu</label>
                         <input type="text" class="form-control" name="Subject" id="Subject" required />
                     </div>
                     <div class="form-group">
-                        <label>Mesaj</label>
+                        <label for="Message">Mesaj</label>
                         <textarea class="form-control" name="Message" id="Message" rows="3" required></textarea>
                     </div>
                     <button type="submit" onclick="addSupportForm()" class="btn btn-primary">Gönder</button>
@@ -87,6 +98,7 @@
         </div>
     </div>
 </div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
@@ -109,6 +121,7 @@
                     $("#Subject").val(data.subject);
                     $("#Message").val(data.message);
                     $("#addSupportFormModal").modal('show');
+                    $("#Customers").val(data.customerEmployeeId);
                 }
             }, async: true,
             error: function (data) {
@@ -142,6 +155,7 @@
         });
     }
     function addSupportForm() {
+        var customerId = document.getElementById("Customers").value;
         $.ajax({
             type: "POST",
             dataType: 'json',
@@ -151,6 +165,7 @@
                 Id: document.getElementById("Id").value,
                 Subject: document.getElementById("Subject").value,
                 Message: document.getElementById("Message").value,
+                CustomerEmployeeId: customerId
             },
             async: true,
             success: function (data, textStatus, jqXHR) {

@@ -23,6 +23,8 @@ namespace Business.Account.Command
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Gender { get; set; }
+        public DateTime BirthDate { get; set; }
     }
     public class AddorUpdateManagementCommandHandler : IRequestHandler<AddOrUpdateManagementCommand, bool>
     {
@@ -43,7 +45,9 @@ namespace Business.Account.Command
                 employee.Surname = request.Surname;
                 employee.Phone = request.Phone;
                 employee.Email = request.Email;
+                employee.Gender = request.Gender;
                 employee.Password = request.Password;
+                employee.BirthDate = request.BirthDate;
                 _employeeRepository.Update(employee);
                 return true;
             }
@@ -60,6 +64,8 @@ namespace Business.Account.Command
                         Surname = request.Surname,
                         Phone = request.Phone,
                         Email = request.Email,
+                        Gender = request.Gender,
+                        BirthDate = request.BirthDate,
                         Password = CryptoService.CreateMD5(request.Password),
                         JobId = (int)DataAccess.Enum.JobType.Management,
                         StatusId = (int)DataAccess.Enum.EmployeeStatus.Approved,
@@ -69,7 +75,7 @@ namespace Business.Account.Command
                 }
                 else return false;
             }
-            
+
         }
     }
 }

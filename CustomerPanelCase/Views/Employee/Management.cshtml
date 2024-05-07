@@ -24,6 +24,8 @@
                     <th>Soyad</th>
                     <th>Telefon</th>
                     <th>Email</th>
+                    <th>Cinsiyet</th>
+                    <th>Doğum Tarihi</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -37,6 +39,8 @@
                         <td>@employee.Surname</td>
                         <td>@employee.Phone</td>
                         <td>@employee.Email</td>
+                        <td>@employee.Gender</td>
+                        <td>@employee.BirthDate.ToString("dd MM yyyy")</td>
                         <td>
                             <button type="button" class="btn btn-info" onclick="editEmployee(@employee.Id)">Güncelle</button>
                         </td>
@@ -78,6 +82,14 @@
                                 <input id="Email" type="email" class="form-control" required />
                             </div>
                             <div class="form-group">
+                                <label>Gender</label>
+                                <input id="Gender" type="gender" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label>Toğum Tarihi</label>
+                                <input type="date" id="BirthDate" type="birthDate" class="form-control" required />
+                            </div>
+                            <div class="form-group">
                                 <label>Password</label>
                                 <input id="Password" type="password" class="form-control" required />
                             </div>
@@ -116,6 +128,8 @@
                     $("#Phone").val(data.phone);
                     $("#Email").val(data.email);
                     $("#addAdminModal").modal('show');
+                    $("#Gender").val(data.gender);
+                    $("#BirthDate").val(data.BirthDate);
                 }
 
             }, async: true,
@@ -161,6 +175,8 @@
                 Surname: document.getElementById("Surname").value,
                 Phone: document.getElementById("Phone").value,
                 Email: document.getElementById("Email").value,
+                Gender: document.getElementById("Gender").value,
+                BirthDate: document.getElementById("BirthDate").value,
                 Password: document.getElementById("Password").value,
             },
             async: true,

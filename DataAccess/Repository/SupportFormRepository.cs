@@ -47,6 +47,7 @@ namespace DataAccess.Repository
             sb.Append("sf.Subject AS Subject, ");
             sb.Append("sf.Message AS Message, ");
             sb.Append("sf.Date AS Date, ");
+            sb.Append("(select CONCAT(Name, ' ',Surname) from Employee where Id = sf.CustomerEmployeeId)  AS CustomerNameSurname, ");
             sb.Append("sf.FormStatusId AS FormStatusId ");
             sb.Append("FROM [dbo].[SupportForm] AS sf ");
             sb.Append("INNER JOIN  [dbo].[Employee] AS e ON sf.EmployeeId = e.Id ");

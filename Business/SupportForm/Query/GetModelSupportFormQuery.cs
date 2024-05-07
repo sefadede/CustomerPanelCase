@@ -16,14 +16,14 @@ namespace Business.SupportForm.Query
     }
     public class GetModelSupportFormQueryHandler : IRequestHandler<GetModelSupportFormQuery, DataAccess.Entities.SupportForm>
     {
-        private readonly ISupportFormRepository s_upportFormRepository;
-        public GetModelSupportFormQueryHandler(ISupportFormRepository upportFormRepository)
+        private readonly ISupportFormRepository _supportFormRepository;
+        public GetModelSupportFormQueryHandler(ISupportFormRepository supportFormRepository)
         {
-            s_upportFormRepository = upportFormRepository;
+            _supportFormRepository = supportFormRepository;
         }
         public async Task<DataAccess.Entities.SupportForm> Handle(GetModelSupportFormQuery request, CancellationToken cancellationToken)
         {
-            return s_upportFormRepository.Find(request.Id);
+            return _supportFormRepository.Find(request.Id);
         }
     }
 }

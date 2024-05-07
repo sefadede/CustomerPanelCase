@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User API</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rastgele Kullanıcı</h1>
+        <button id="fetch-user-btn">Kullanıcıyı Getir</button>
+        <div id="user-card" class="card hidden">
+            <img id="user-picture" class="card-img-top" src="" alt="User Picture">
+            <div class="card-body">
+                <h5 id="user-name" class="card-title"></h5>
+                <p id="user-email" class="card-text"></p>
+                <p id="user-phone" class="card-text"></p>
+                <p id="user-city" class="card-text"></p>
+                <p id="user-registered" class="card-text"></p>
+                <p id="user-age" class="card-text"></p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .card {
+        max-width: 300px;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    .hidden {
+        display: none;
+    }
+
+</style>
+
+<script>
+
+    document.getElementById('fetch-user-btn').addEventListener('click', function () {
+        fetch('https://randomuser.me/api/')
+            .then(response => response.json())
+            .then(data => {
+                const user = data.results[0]; // İlk kullanıcıyı alıyoruz
+
+                // Kullanıcı bilgilerini kartta göster
+                document.getElementById('user-picture').src = user.picture.large;
+                document.getElementById('user-name').textContent = `${user.name.title} ${user.name.first} ${user.name.last}`;
+                document.getElementById('user-email').textContent = `Email: ${user.email}`;
+                document.getElementById('user-phone').textContent = `Telefon: ${user.phone}`;
+                document.getElementById('user-city').textContent = `Şehir: ${user.location.city}`;
+                document.getElementById('user-registered').textContent = `Kayıt Tarihi: ${user.registered.date}`;
+                document.getElementById('user-age').textContent = `Yaş: ${user.dob.age}`;
+
+                // Kartı göster
+                document.getElementById('user-card').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+            });
+    });
+
+
+</script>

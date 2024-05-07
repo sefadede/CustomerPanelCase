@@ -39,6 +39,7 @@ namespace CustomerPanelCase.Controllers
                 Id = model.Id,
                 Subject = model.Subject,
                 Message = model.Message,
+                CustomerEmployeeId = model.CustomerEmployeeId,
             });
             return Json(Ok("Destek formu başarıyla tamamlandı."));
 

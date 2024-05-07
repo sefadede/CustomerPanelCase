@@ -21,7 +21,7 @@ namespace Business.SupportForm.Query
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ISupportFormRepository _supportFormRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public GetSupportFormQueryHandler(IEmployeeRepository employeeRepository, ISupportFormRepository supportFormRepository,IHttpContextAccessor httpContextAccessor)
+        public GetSupportFormQueryHandler(IEmployeeRepository employeeRepository, ISupportFormRepository supportFormRepository, IHttpContextAccessor httpContextAccessor)
         {
             _employeeRepository = employeeRepository;
             _supportFormRepository = supportFormRepository;
@@ -41,11 +41,12 @@ namespace Business.SupportForm.Query
                 response.CanEdit = true;
             }
             var supportFormList = _supportFormRepository.GetAllByEmployeeId(employeeId, allList);
-            foreach ( var supportForm in supportFormList )
+            foreach (var supportForm in supportFormList)
             {
                 supportForm.FromStatusText = Enum.GetName(typeof(DataAccess.Enum.FormStatus), supportForm.FormStatusId);
             }
             response.SupportFormRs = supportFormList;
+            response.CustomerEmployee = _employeeRepository.GetAllByJobType((int)DataAccess.Enum.JobType.Management);
             return response;
         }
     }

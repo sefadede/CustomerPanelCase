@@ -12,5 +12,6 @@ namespace DataAccess.Interface
         Task<Employee> CheckLogin(string Email);
         Employee FindEmployeeByEmail(string Email);
         List<Employee> GetAllByJobType(int jobId);
+        List<Employee> GetAllByStatusId(int jobId);
     }
 }

@@ -16,6 +16,7 @@ namespace Business.SupportForm.Command
         public int Id { get; set; }
         public string Subject { get; set; }
         public string Message { get; set; }
+        public int CustomerEmployeeId { get; set; }
 
     }
     public class AddOrUpdateSupportFormCommandHandler : IRequestHandler<AddOrUpdateSupportFormCommand, bool>
@@ -38,6 +39,7 @@ namespace Business.SupportForm.Command
                 supportForm.Message = request.Message;
                 supportForm.Date = DateTime.Now;
                 supportForm.FormStatusId = (int)DataAccess.Enum.FormStatus.OperationIsDone;
+                supportForm.CustomerEmployeeId = request.CustomerEmployeeId;
                 _supportFormRepository.Update(supportForm);
                 return true;
             }
@@ -48,6 +50,7 @@ namespace Business.SupportForm.Command
                 _supportFormRepository.Insert(new DataAccess.Entities.SupportForm
                 {
                     EmployeeId = employeeId,
+                    CustomerEmployeeId = request.CustomerEmployeeId,
                     Subject = request.Subject,
                     Message = request.Message,
                     Date = DateTime.Now,

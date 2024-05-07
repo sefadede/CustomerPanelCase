@@ -27,6 +27,7 @@ namespace Business.Account.Query
             EmployeeListDTO response = new EmployeeListDTO();
             var httpContext = _httpContextAccessor.HttpContext;
             var employee = _employeeRepository.GetAllByJobType((int)DataAccess.Enum.JobType.Customer);
+
             response.Employee = employee;
 
             response.Jwt = httpContext.Session.GetString("JwtToken");

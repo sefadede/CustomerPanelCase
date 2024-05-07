@@ -16,6 +16,7 @@ namespace DataAccess
             services.AddTransient<IJobRepository, JobRepository>();
             services.AddTransient<ISupportFormRepository, SupportFormRepository>();
             services.AddTransient<ITokenHelper, JwtHelper>();
+            services.AddTransient<IChatRepository, ChatRepository>();
             return services;
         }
     }

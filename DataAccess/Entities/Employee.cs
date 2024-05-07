@@ -14,5 +14,7 @@ namespace DataAccess.Entities
         public int JobId { get; set; }
         public int StatusId { get; set; }
         public int MasterEmployeeId { get; set; }
+        public string Gender { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 }

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\RannaCore\RannaCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Chat\Command\" />
+  </ItemGroup>
+
 </Project>

@@ -63,6 +63,22 @@ namespace DataAccess.Repository
 
             return result;
         }
+
+
+        public List<Employee> GetAllByStatusId(int statusId)
+        {
+            List<Employee> result;
+            var sb = new StringBuilder();
+            sb.Append("select * from [dbo].[Employee] ");
+            sb.Append("where StatusId = @StatusId");
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                result = connection.Query<Employee>(sb.ToString(), new {StatusId = statusId }).ToList();
+            }
+            return result;
+        }
         public List<Employee> GetAllByJobType(int jobId)
         {
             List<Employee> result;

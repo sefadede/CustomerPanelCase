@@ -33,6 +33,10 @@ namespace CustomerPanelCase.Controllers
 
             return View(await MediatrSend(request));
         }
+        public async Task<IActionResult> RandomUser()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<JsonResult> AddOrUpdateManagement(Employee model)
         {
@@ -40,16 +44,18 @@ namespace CustomerPanelCase.Controllers
 
             //if (!string.IsNullOrEmpty(jwtToken) && IsAuthorized(jwtToken))
             //{
-                var status = await MediatrSend(new AddOrUpdateManagementCommand
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    Surname = model.Surname,
-                    Phone = model.Phone,
-                    Email = model.Email,
-                    Password = model.Password
-                });
-                return Json(Ok("Yönetici ekleme iþlemi baþarýyla tamamlandý."));
+            var status = await MediatrSend(new AddOrUpdateManagementCommand
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Surname = model.Surname,
+                Phone = model.Phone,
+                Email = model.Email,
+                Password = model.Password,
+                Gender = model.Gender,
+                BirthDate = model.BirthDate,
+            });
+            return Json(Ok("Yönetici ekleme iþlemi baþarýyla tamamlandý."));
             //}
             //else
             //{
@@ -77,7 +83,7 @@ namespace CustomerPanelCase.Controllers
             var model = await MediatrSend(request);
             return Json(model);
         }
-        
+
         public async Task<IActionResult> Customer(GetCustomerUserListQuery request)
         {
             return View(await MediatrSend(request));
@@ -89,16 +95,16 @@ namespace CustomerPanelCase.Controllers
 
             //if (!string.IsNullOrEmpty(jwtToken) && IsAuthorized(jwtToken))
             //{
-                var status = await MediatrSend(new AddOrUpdateCustomerCommand
-                {
-                    Id = model.Id,
-                    Name = model.Name,
-                    Surname = model.Surname,
-                    Phone = model.Phone,
-                    Email = model.Email,
-                    Password = model.Password
-                });
-                return Json(Ok("Müþteri ekleme iþlemi baþarýyla tamamlandý."));
+            var status = await MediatrSend(new AddOrUpdateCustomerCommand
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Surname = model.Surname,
+                Phone = model.Phone,
+                Email = model.Email,
+                Password = model.Password
+            });
+            return Json(Ok("Müþteri ekleme iþlemi baþarýyla tamamlandý."));
             //}
             //else
             //{
